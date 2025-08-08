@@ -1,0 +1,199 @@
+## Using `__init__.py` to Simplify Imports
+
+To make the functions from `module1` and `module2` directly available when you import `mypackage`, you can add an `__init__.py` file to the `mypackage` directory. This file will handle the imports for you, simplifying the way other scripts interact with your package.
+
+### 1\. Package Structure
+
+First, set up your directory with the correct files. Your project directory should look like this:
+
+```
+my_project/
+├── mypackage/
+│   ├── __init__.py
+│   ├── module1.py
+│   └── module2.py
+└── main.py
+```
+
+-----
+
+### 2\. File Contents
+
+Next, add the code for each file as follows:
+
+**`mypackage/module1.py`**
+This file contains your first function.
+
+```python
+def greet(name):
+    """Returns a greeting for the given name."""
+    return f"Hello, {name}!"
+```
+
+**`mypackage/module2.py`**
+This file contains your second function.
+
+```python
+def farewell(name):
+    """Returns a farewell message for the given name."""
+    return f"Goodbye, {name}!"
+```
+
+**`mypackage/__init__.py`**
+This is the key file. It imports the functions from `module1` and `module2` and makes them part of the `mypackage` namespace.
+
+```python
+from .module1 import greet
+from .module2 import farewell
+```
+
+The dot (`.`) in `from .module1` signifies a **relative import**, meaning you're importing from a module within the same package.
+
+-----
+
+### 3\. Using the Package
+
+Finally, you can use the functions in your `main.py` script. Because of the `__init__.py` file, you don't need to specify `module1` or `module2`. You can simply import directly from `mypackage`.
+
+**`main.py`**
+This script demonstrates how to call the functions after they have been exposed by `__init__.py`.
+
+```python
+from mypackage import greet, farewell
+
+# Use the functions directly
+print(greet("Alice"))
+print(farewell("Bob"))
+```
+
+Running this `main.py` script will produce the following output:
+
+```
+Hello, Alice!
+Goodbye, Bob!
+```
+
+The `__init__.py` file serves two main functions in Python:
+
+1.  **It marks a directory as a Python package.** Without `__init__.py`, a directory is just a regular folder and can't be imported using the `import` statement.
+2.  **It controls the package's behavior during import.** The code inside `__init__.py` is executed automatically when the package is imported. This allows for package-level initialization and for specifying what to expose when a user uses `from package import *`.
+
+For example, if you have a package structure like this:
+
+```
+my_package/
+    __init__.py
+    module_a.py
+    module_b.py
+```
+
+The presence of `__init__.py` tells Python that `my_package` is a package. When you run `import my_package`, the `__init__.py` file is executed. You can use it to import specific functions from `module_a.py` and `module_b.py` directly into the `my_package` namespace, making them accessible to users without them having to know which specific module they came from.
+
+A common pattern is to make a package's contents directly available by putting this in `__init__.py`:
+
+```python
+# In my_package/__init__.py
+from .module_a import some_function
+from .module_b import another_function
+```
+
+This way, a user can simply do `from my_package import some_function` instead of `from my_package.module_a import some_function`.
+The `ImportError` you're seeing means Python couldn't find the `add` function within a module named `mypackage`. This is likely due to one of the following reasons:
+
+- **The module doesn't exist**: The directory or file named `mypackage` might not be in a location where Python looks for modules.
+- **Incorrect file name**: The actual name of the file or directory containing the functions might be misspelled.
+- **Missing `__init__.py`**: If `mypackage` is a directory, it must contain a file named `__init__.py` to be recognized as a package. This file can be empty, but its presence is crucial.
+- **The function doesn't exist**: The function `add` isn't defined inside the `mypackage` module. You might have made a typo, or the function has a different name.
+
+To fix this, you need to ensure that the `mypackage` directory (with an `__init__.py` file) and its contents are in the same directory as the script you are running, or in a location included in Python's `sys.path`.
+Tentu, saya akan bantu melakukan pengecekan kenormalan untuk data yang Anda berikan.
+
+Untuk memeriksa apakah data Anda berdistribusi normal, kita akan menggunakan kombinasi dua metode:
+1.  **Uji Visual**: Membuat plot (gambar) untuk melihat bentuk distribusi data secara visual.
+2.  **Uji Statistik**: Menggunakan uji statistik formal untuk mendapatkan hasil matematis.
+
+Pertama, saya akan rapikan dan proses data Anda. Saya asumsikan tanda koma (`,`) adalah pemisah desimal.
+
+Data yang terkumpul adalah: `60.1, 71.3, 65.2, 60.8, 83.9, 60, 83.6, 60.4, 78.9, 70.3, 70.3`.
+
+Sekarang, mari kita lakukan analisisnya.
+Berdasarkan analisis visual dan statistik, **data Anda dapat diasumsikan berdistribusi normal**.
+
+Berikut adalah rincian lengkap dari analisisnya.
+
+### **1. Analisis Visual**
+
+Dua plot utama digunakan untuk memeriksa data secara visual:
+
+* **Histogram**: Plot ini menunjukkan frekuensi data Anda. Jika data terdistribusi normal, histogram akan berbentuk seperti lonceng (bell curve). Seperti yang terlihat pada gambar, distribusi data Anda tidak menunjukkan penyimpangan yang ekstrem dari bentuk lonceng, meskipun dengan 11 titik data, bentuknya tidak akan sempurna.
+
+* **Normal Q-Q Plot**: Ini adalah metode visual terbaik untuk menguji normalitas. Jika data Anda normal, titik-titik data akan jatuh sangat dekat dengan garis lurus diagonal berwarna merah. Pada plot Anda, titik-titik tersebut mengikuti garis dengan cukup baik, yang merupakan indikasi kuat adanya normalitas.
+
+
+
+
+---
+
+### **2. Uji Statistik Formal (Shapiro-Wilk)**
+
+Untuk konfirmasi matematis, kita menggunakan Uji Shapiro-Wilk, yang sangat andal untuk ukuran sampel kecil.
+
+* **Hipotesis Nol ($H_0$)**: Data berdistribusi normal.
+* **Hipotesis Alternatif ($H_1$)**: Data tidak berdistribusi normal.
+
+Hasil dari uji tersebut adalah:
+* **Statistik Uji**: 0.867
+* **P-value**: **0.0703**
+
+#### **Interpretasi Hasil**
+
+Kita membandingkan p-value dengan tingkat signifikansi umum, yaitu 0.05.
+
+* **Aturan**: Jika p-value > 0.05, kita "gagal menolak" hipotesis nol. Ini berarti tidak ada cukup bukti statistik untuk mengatakan bahwa data tersebut *tidak* normal.
+* **Hasil Anda**: $0.0703 > 0.05$
+
+Karena p-value lebih besar dari 0.05, kita gagal menolak hipotesis nol.
+
+---
+
+### **Kesimpulan Akhir** 💡
+
+Kombinasi dari **Q-Q plot** yang menunjukkan titik-titik data mengikuti garis lurus dan **hasil Uji Shapiro-Wilk** dengan p-value (0.0703) yang lebih besar dari 0.05, memberikan bukti yang kuat bahwa **data Anda dapat dianggap berdistribusi normal**.
+## Gradient Descent: The Navigator of Machine Learning Optimization
+
+At its core, **gradient descent** is a powerful and widely used iterative optimization algorithm essential for machine learning and deep learning. Its primary function is to find the minimum of a function. In the context of machine learning, this "function" is typically a **cost or loss function**, which quantifies the error of a model's predictions compared to the actual outcomes. By minimizing this function, the model's parameters are adjusted to improve its accuracy.
+
+The intuition behind gradient descent can be likened to descending a mountain in a thick fog. To find the valley (the minimum), one would feel for the steepest downward slope at their current position and take a step in that direction. This process is repeated until the lowest point is reached. In the mathematical landscape of a cost function, the "steepest slope" is determined by the negative of the gradient of the function at that point.
+
+### The Mechanics of Descent: How It Works
+
+The algorithm operates in a series of iterations, with each step aiming to move closer to the function's minimum. The core of the process lies in the following update rule:
+
+$$\theta_{new} = \theta_{old} - \eta \nabla J(\theta)$$
+
+Where:
+* $\theta$ represents the parameters (or weights) of the model.
+* $\eta$ (eta) is the **learning rate**, a hyperparameter that controls the size of the step taken in each iteration.
+* $\nabla J(\theta)$ is the gradient of the cost function $J(\theta)$ with respect to the parameters $\theta$. The gradient is a vector of partial derivatives that points in the direction of the steepest ascent of the function.
+
+By subtracting the product of the learning rate and the gradient from the current parameters, the algorithm effectively takes a step in the direction of the steepest descent. The choice of the learning rate is crucial; a small learning rate can lead to slow convergence, while a large learning rate might cause the algorithm to overshoot the minimum and fail to converge.
+
+### Navigating the Terrain: Types of Gradient Descent
+
+There are three main variations of gradient descent, each with its own advantages and disadvantages regarding computational efficiency and convergence:
+
+* **Batch Gradient Descent:** In this version, the gradient is calculated using the entire training dataset in each iteration. This provides a stable and accurate estimate of the gradient, but it can be computationally expensive and slow, especially for large datasets.
+
+* **Stochastic Gradient Descent (SGD):** In contrast to the batch method, SGD updates the parameters for each individual training example. This makes it much faster and allows it to escape shallow local minima more easily. However, the frequent updates introduce more noise into the process, which can cause the convergence to be erratic.
+
+* **Mini-Batch Gradient Descent:** This is a compromise between the two extremes. It updates the parameters based on a small, randomly selected subset of the training data, called a mini-batch. This approach balances the stability of batch gradient descent with the efficiency of stochastic gradient descent, making it the most common variant used in practice today.
+
+### The Engine of Modern AI: Applications in Machine Learning
+
+Gradient descent is the backbone of training for a vast array of machine learning models, including:
+
+* **Linear Regression and Logistic Regression:** Used to find the optimal coefficients for the model's predictive equation.
+* **Neural Networks and Deep Learning:** It is the fundamental optimization algorithm for training deep neural networks, enabling them to learn complex patterns from data in fields like image recognition, natural language processing, and autonomous driving.
+* **Support Vector Machines (SVMs):** While not always the primary method, it can be used to optimize the parameters of SVMs.
+
+In essence, whenever a machine learning model is "trained" or "learns" from data, it is highly likely that a form of gradient descent is working behind the scenes, diligently navigating the complex landscape of the cost function to find the optimal set of parameters that make the model as accurate as possible.
